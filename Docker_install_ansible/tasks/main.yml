@@ -1,5 +1,5 @@
 - name: pre-tasks
-  shell: sudo apt-get install linux-image-extra-$(unmae-r) linux-image-extra-virtual
+  shell: apt-get install linux-image-extra-$(unmae-r) linux-image-extra-virtual
   register: r1
 
 - name: install docker packages
