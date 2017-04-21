@@ -1,6 +1,6 @@
 ---
 - name: docker install
-  hosts: localhost
+  hosts: all
   become: true
   roles:
-    - Docker_install_ansible
+  - Docker_install_ansible
