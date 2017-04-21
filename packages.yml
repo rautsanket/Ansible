@@ -1,0 +1,17 @@
+---
+- name: install packages
+  hosts: all
+  become: true
+  tasks:
+    - name: install packages
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+      - wireshark
+      - tcpdump
+      - nmap
+    - name: system restart
+      shell: restart -f
+      register: r1
+    - name: restart the system & wait for ssh to come up
+      local_actions: wait_for={{ ansible_fqdn }} port=22 delay=500 timeout=500 state=started
+      when: r1.changed
