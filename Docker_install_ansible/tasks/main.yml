@@ -1,0 +1,34 @@
+- name: pre-tasks
+  shell: >
+    sudo apt-get install \
+      linux-image-extra-$(unmae-r) \
+      linux-image-extra-virtual
+  register: r1
+
+- name: install docker packages
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+
+- name: add official docker key
+  shell: {{item}}
+  with_items:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo apt-key fingerprint 0EBFCD88
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+- name: update
+  shell: apt-get update
+
+- name: install docker-ce
+  apt: name=docker-ce state=latest update_cache=yes
+
+- name: docker-ce
+  shell: apt-cache madison docker-ce
+
+- name: run hello-world container
+  shell: docker run hello-world
+  
