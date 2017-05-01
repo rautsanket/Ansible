@@ -1,9 +1,16 @@
+- name: uninstall docker-ce
+  shell: sudo apt-get remove docker docker-engine
+  register: uninstall_docker_ce
+  changed_when: uninstall_docker_ce == 1
+  failed_when: uninstall_docker_ce == 2
+
 - name: pre-tasks
   shell: apt-get install \
     >     linux-image-extra-$(uname -r) \
     >     linux-image-extra-virtual
   register: r1
-
+  when: uninstall_docker_ce.changed
+  
 - name: install docker packages
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
